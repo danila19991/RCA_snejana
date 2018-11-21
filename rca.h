@@ -5,21 +5,31 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonParseError>
-#include <Qfile>
+#include <Qset>
+#include <Qmap>
+#include <QPair>
+
+const int cl = 3;
 
 class Rca: public QTcpServer
 {
     Q_OBJECT
+
 public:
     Rca();
     ~Rca();
+private:
     QTcpSocket* socket;
     QTcpSocket* socket1;
+    QTcpSocket* socketP;
+    QTcpSocket* newsocket;
+    QSet<QTcpSocket*> socketNobody;
+    QMap<int, QPair<QTcpSocket*, QByteArray>> socketFamiliar;
     QByteArray Data;
     QJsonDocument doc;
     QJsonParseError docerror;
     QByteArray name[3];
-    int nconnect[3];
+    int count = 0;
 
 public slots:
     void startRca();
