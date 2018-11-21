@@ -1,11 +1,6 @@
 #include "rca.h"
 
-Rca::Rca(){}
-Rca::~Rca(){}
-
-
-void Rca::startRca()
-{
+Rca::Rca(){
     socket1 = new QTcpSocket(this);
 
     socket1->connectToHost("127.0.0.1", 9093); //connect to 3Dscene
@@ -19,10 +14,11 @@ void Rca::startRca()
     }
     else
     {
-         qDebug()<<"Error! Unable to start the server:"
+        qDebug()<<"Error! Unable to start the server:"
                 << this->errorString();
     }
 }
+Rca::~Rca(){}
 
 void Rca:: incomingConnection( int socketDescriptor )
 {

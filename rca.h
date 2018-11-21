@@ -32,7 +32,6 @@ private:
     int count = 0;
 
 public slots:
-    void startRca();
     void incomingConnection(int socketDescriptor);
     void sockReady();
     void sockDisc();
