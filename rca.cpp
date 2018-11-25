@@ -57,11 +57,48 @@ void Rca::sockReady1()
     }
 }
 
- void manager(QByteArray Data)
+ void  Rca::manager(QByteArray mess, QTcpSocket* s)
+ {
+     if(s==socketP){
+     messfromplanner(mess);
+     }
+     else
+     {
+         messfromCunit(mess);
+     }
+ }
+
+ void  Rca::messfromplanner(QByteArray mess)
+ {
+    bool flag = true;
+    QByteArray name, m;
+    for (int i = 0; i < mess.size(); ++i) {
+
+        if (mess.at(i) == ':')
+        {
+            flag = false;
+            continue;
+        }
+
+        if (flag)
+        {
+            name.append(mess[i]);
+        }
+        else
+        {
+            m.append(mess[i]);
+        }
+     }
+    QMap<QByteArray,QTcpSocket*>::const_iterator i = socketFamiliar.find("name");
+    //neeed to send a message to socket  i.value()
+    i.value()->write(m);
+    i.value()->waitForBytesWritten(500);
+ }
+
+ void  Rca::messfromCunit(QByteArray mess)
  {
 
  }
-
 void Rca::sockReady()
 {
     QObject* object = QObject::sender(); //Returns a pointer to the object that sent the signal
@@ -78,8 +115,8 @@ void Rca::sockReady()
     }
     else{
         if((Data=="e")&&(socketP==newsocket)){
-                foreach(int i,socketFamiliar.keys()){
-                    socketFamiliar[i].first->close(); // close all connected CUnits sockets
+                foreach(QByteArray i,socketFamiliar.keys()){
+                    socketFamiliar[i]->close(); // close all connected CUnits sockets
                 }
                 socketFamiliar.clear(); //Removes all items from the map socketFamiliar
              qDebug()<< "Expected disconnection with Planner";
@@ -93,15 +130,15 @@ void Rca::sockReady()
             if(!socketNobody.contains(newsocket))
             {
                 //then the name came from an unfamiliar socket
-             socketFamiliar.insert(count, qMakePair(newsocket, Data)); //add it to Familiar
+             socketFamiliar.insert(Data, newsocket); //add it to Familiar
              socketNobody.erase(socketNobody.find(newsocket)); //remove from the list of unknown
              qDebug()<< "Find the CUnit: "<< Data;;
-             count ++;
+
             }
             else
             {
                 //the message passes an Familiar socket
-                manager(Data);
+                manager(Data, newsocket);
             }
 
         }

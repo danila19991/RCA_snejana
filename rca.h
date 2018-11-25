@@ -18,22 +18,25 @@ class Rca: public QTcpServer
 public:
     Rca();
     ~Rca();
+    void manager(QByteArray, QTcpSocket*);
+    void messfromplanner(QByteArray mess);
+    void messfromCunit(QByteArray mess);
 private:
     QTcpSocket* socket;
     QTcpSocket* socket1;
     QTcpSocket* socketP;
     QTcpSocket* newsocket;
     QSet<QTcpSocket*> socketNobody;
-    QMap<int, QPair<QTcpSocket*, QByteArray>> socketFamiliar;
+   // QMap<int, QPair<QTcpSocket*, QByteArray>> socketFamiliar;
+    QMap<QByteArray,QTcpSocket*> socketFamiliar;
     QByteArray Data;
     QJsonDocument doc;
     QJsonParseError docerror;
-    QByteArray name[3];
     int count = 0;
 
 public slots:
 
-    void incomingConnection(int socketDescriptor);
+    void incomingConnection(int socketDescriptor); 
     void sockReady();
     void sockDisc();
     void sockReady1();
