@@ -19,8 +19,8 @@ public:
     Rca();
     ~Rca();
     void manager(QByteArray, QTcpSocket*);
-    void messfromplanner(QByteArray mess);
-    void messfromCunit(QByteArray mess);
+    void messFromPlanner(QByteArray mess);
+    void messFromCunit(QByteArray mess);
 private:
     QTcpSocket* socket;
     QTcpSocket* socket1;

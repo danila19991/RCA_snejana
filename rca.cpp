@@ -59,19 +59,20 @@ void Rca::sockReady1()
 
  void  Rca::manager(QByteArray mess, QTcpSocket* s)
  {
-     if(s==socketP){
-     messfromplanner(mess);
+     if(s==socketP)
+     {
+        messFromPlanner(mess);
      }
      else
      {
-         messfromCunit(mess);
+         messFromCunit(mess);
      }
  }
 
- void  Rca::messfromplanner(QByteArray mess)
+ void  Rca::messFromPlanner(QByteArray mess)
  {
     bool flag = true;
-    QByteArray name, m;
+    QByteArray name, message; // name of CUnit and Mesage for it
     for (int i = 0; i < mess.size(); ++i) {
 
         if (mess.at(i) == ':')
@@ -86,17 +87,46 @@ void Rca::sockReady1()
         }
         else
         {
-            m.append(mess[i]);
+            message.append(mess[i]);
         }
      }
     QMap<QByteArray,QTcpSocket*>::const_iterator i = socketFamiliar.find("name");
     //neeed to send a message to socket  i.value()
-    i.value()->write(m);
+    i.value()->write(message);
     i.value()->waitForBytesWritten(500);
  }
 
- void  Rca::messfromCunit(QByteArray mess)
+ void  Rca::messFromCunit(QByteArray mess)
  {
+     bool flag = true;
+
+     QByteArray id, SomeData;
+     for (int i = 0; i < mess.size(); ++i) {
+
+         if (mess.at(i) == ':')
+         {
+             flag = false;
+             continue;
+         }
+
+         if (flag)
+         {
+             id.append(mess[i]);
+         }
+         else
+         {
+             SomeData.append(mess[i]);
+         }
+     }
+
+     auto encodedID = id.toBase64();
+     auto encodedSomeData = SomeData.toBase64();
+
+     QJsonObject mess_obj;
+     mess_obj.insert(QString::fromLatin1(encodedID),QJsonValue(QString::fromLatin1(encodedSomeData)));
+
+     socket1->write(QJsonDocument(mess_obj).toJson(QJsonDocument::Indented));
+
 
  }
 void Rca::sockReady()
