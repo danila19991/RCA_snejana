@@ -8,6 +8,7 @@
 #include <Qset>
 #include <Qmap>
 #include <QPair>
+ #include <QString>
 
 const int cl = 3;
 
@@ -19,8 +20,8 @@ public:
     Rca();
     ~Rca();
     void manager(QByteArray, QTcpSocket*);
-    void messFromPlanner(QByteArray mess);
-    void messFromCunit(QByteArray mess);
+   // void msgFromPlanner(QByteArray mess);
+   // void msgFromCunit(QByteArray mess);
 private:
     QTcpSocket* socket;
     QTcpSocket* socket1;
@@ -41,6 +42,8 @@ public slots:
     void sockDisc();
     void sockReady1();
     void sockDisc1();
+    void msgFromPlanner();
+    void msgFromCunit();
 };
 
 #endif // RCA_H
