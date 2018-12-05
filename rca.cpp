@@ -20,7 +20,9 @@ Rca::Rca(){
     }
 }
 
-Rca::~Rca(){}
+Rca::~Rca(){
+
+}
 
 // client is disconnected
 void Rca::sockDisc()
@@ -57,17 +59,7 @@ void Rca::sockReady1()
     }
 }
 
- void  Rca::manager(QByteArray mess, QTcpSocket* s)
- {
-     if(s==socketP)
-     {
-        msgFromPlanner(mess);
-     }
-     else
-     {
-         msgFromCunit(mess);
-     }
- }
+
 
  void  Rca::msgFromPlanner()
  {
@@ -81,7 +73,7 @@ void Rca::sockReady1()
             socketFamiliar.clear(); //Removes all items from the map socketFamiliar
          qDebug()<< "Expected disconnection with Planner";
          socketP->close(); // close Planner socket
-         newsocket->close();
+         newsocket->close(); //?
          count = 0;
     }
     else{
@@ -106,7 +98,7 @@ void Rca::sockReady1()
      msg.prepend("{");
      msg.append("}");
 
-     socket1->write(msg);
+     socket1->write(msg); //sent JSON
 
  }
 void Rca::sockReady()

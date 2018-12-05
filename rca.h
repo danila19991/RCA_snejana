@@ -8,7 +8,8 @@
 #include <Qset>
 #include <Qmap>
 #include <QPair>
- #include <QString>
+#include <QString>
+#include <QSharedPointer>
 
 const int cl = 3;
 
@@ -20,15 +21,18 @@ public:
     Rca();
     ~Rca();
     void manager(QByteArray, QTcpSocket*);
-   // void msgFromPlanner(QByteArray mess);
-   // void msgFromCunit(QByteArray mess);
+    Rca(const Rca&) = delete;
+    Rca& operator=(const Rca&) = delete;
+    Rca(Rca&&)  = delete;
+    Rca& operator=(Rca&&) = delete;
+
 private:
+    //QSharedPointer<QTcpSocket> socket(new QTcpSocket);
     QTcpSocket* socket;
     QTcpSocket* socket1;
     QTcpSocket* socketP;
     QTcpSocket* newsocket;
     QSet<QTcpSocket*> socketNobody;
-   // QMap<int, QPair<QTcpSocket*, QByteArray>> socketFamiliar;
     QMap<QByteArray,QTcpSocket*> socketFamiliar;
     QByteArray Data;
     QJsonDocument doc;
