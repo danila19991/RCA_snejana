@@ -27,10 +27,16 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-    rca.cpp
+    rca.cpp \
+    w3dscene.cpp \
+    wplanner.cpp \
+    wcu.cpp
 
 HEADERS += \
-    rca.h
+    rca.h \
+    w3dscene.h \
+    wplanner.h \
+    wcu.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

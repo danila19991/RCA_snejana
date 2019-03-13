@@ -1,13 +1,12 @@
 #include "rca.h"
-
+#include "W3dscene.h"
 
 
 Rca::Rca(){
     socket1 = new QTcpSocket(this);
-
-    socket1->connectToHost("127.0.0.1", 9093); //connect to 3Dscene
-    connect(socket1, &QTcpSocket::readyRead, this, &Rca::sockReady1);
-    connect(socket1, &QTcpSocket::disconnected, this, &Rca::sockDisc1);
+    W3dscene w3dscene(socket1, 9093);
+    connect(socket1, &QTcpSocket::readyRead, w3dscene, &W3dscene::sockReady1);//?
+    connect(socket1, &QTcpSocket::disconnected, w3dscene, &W3dscene::sockDisc1);//?
 
     if(this->listen( QHostAddress::Any, 5555 ))
     {
@@ -24,18 +23,6 @@ Rca::~Rca(){
 
 }
 
-// client is disconnected
-void Rca::sockDisc()
-{
-    qDebug()<<"Disconnect";
-    socket ->deleteLater();
-}
-// 3Dscene is disconnected
-void Rca::sockDisc1()
-{
-    qDebug()<<"Disconnect";
-    socket1->deleteLater();
-}
 
 void Rca:: incomingConnection( int socketDescriptor )
 {
@@ -51,56 +38,8 @@ void Rca:: incomingConnection( int socketDescriptor )
 
 }
 
-void Rca::sockReady1()
-{
-    if(socket->waitForConnected(3000))
-    {
-        qDebug()<<"Connection with 3Dscene!";
-    }
-}
 
 
-
- void  Rca::msgFromPlanner()
- {
-    QObject* object = QObject::sender(); //Returns a pointer to the object that sent the signal
-    socketP = static_cast<QTcpSocket*>(object); //explicit type conversion from the QObject* to the QTcpSocket*
-    QByteArray msg = socketP -> readAll();
-    if(Data=="e"){
-            foreach(QByteArray i,socketFamiliar.keys()){
-                socketFamiliar[i]->close(); // close all connected CUnits sockets
-            }
-            socketFamiliar.clear(); //Removes all items from the map socketFamiliar
-         qDebug()<< "Expected disconnection with Planner";
-         socketP->close(); // close Planner socket
-         newsocket->close(); //?
-         count = 0;
-    }
-    else{
-    QByteArray name, message; // name of CUnit and Mesage for it
-    QStringList w=QString(msg).split(";");
-    name = w.at(0).toLocal8Bit().constData();
-    message =  w.at(1).toLocal8Bit().constData();
-
-    QMap<QByteArray,QTcpSocket*>::const_iterator i = socketFamiliar.find(name);
-    //neeed to send a message to socket  i.value()
-    i.value()->write(message);
-    i.value()->waitForBytesWritten(500);
-    }
- }
-
- void  Rca::msgFromCunit()
- {
-     QObject* object = QObject::sender(); //Returns a pointer to the object that sent the signal
-     socket  = static_cast<QTcpSocket*>(object); //explicit type conversion from the QObject* to the QTcpSocket*
-     QByteArray msg = socket  -> readAll();
-
-     msg.prepend("{");
-     msg.append("}");
-
-     socket1->write(msg); //sent JSON
-
- }
 void Rca::sockReady()
 {
     QObject* object = QObject::sender(); //Returns a pointer to the object that sent the signal
@@ -109,12 +48,12 @@ void Rca::sockReady()
 
 
     if(Data=="p"){ //the name of the planner came
-
-        socketP=newsocket;
+        //Wplanner(newsocket);
+        socketP=newsocket; //удалить
         socketNobody.erase(socketNobody.find(newsocket));//remove the socket from the list of undefined
         qDebug()<< "Find the Planner!";
-        disconnect(newsocket, &QTcpSocket::readyRead, this, &Rca::sockReady);
-        connect(newsocket, &QTcpSocket::readyRead, this, &Rca::msgFromPlanner);
+        disconnect(newsocket, &QTcpSocket::readyRead, this, &Rca::sockReady);//удалить - ?
+        connect(newsocket, &QTcpSocket::readyRead, this, &Rca::msgFromPlanner);//удалить - ?
 
     }
     else{
