@@ -5,36 +5,35 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonParseError>
-#include <Qset>
-#include <Qmap>
 #include <QPair>
 #include <QString>
 #include <QSharedPointer>
 
 
-class W3dscene
+class W3dscene: public QTcpServer
 {
     Q_OBJECT
 
 public:
 
     W3dscene();
-    W3dscene(QTcpSocket* socketn, int port); //+port -socket ??
+    W3dscene(int port);
     ~W3dscene();
     W3dscene(const W3dscene&) = delete;
     W3dscene& operator=(const W3dscene&) = delete;
     W3dscene(W3dscene&&)  = delete;
     W3dscene& operator=(W3dscene&&) = delete;
+    bool changeSocket();
 
 private:
 
     QTcpSocket* socket;
     int Port;
+    bool connection;
 
 public slots:
     void sendto3dscene(QByteArray msg);
-    void sockReady1();
-    void sockDisc1();
+    void sockDisc();
 
 };
 

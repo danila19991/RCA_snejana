@@ -6,8 +6,6 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonParseError>
-#include <Qset>
-#include <Qmap>
 #include <QPair>
 #include <QString>
 #include <QSharedPointer>
@@ -25,16 +23,18 @@ public:
     Wcu& operator=(const Wcu&) = delete;
     Wcu(Wcu&&)  = delete;
     Wcu& operator=(Wcu&&) = delete;
+    bool changeSocket(QTcpSocket* socketn);
 
 private:
     QTcpSocket* socket;
     QString Name;
+    bool connection;
 
 public slots:
     void sockReady();
     void sockDisc();
     void msgToCunit(QByteArray msg);
-    QByteArray msgFromCunit();
+    void msgFromCunit();
 signals:
     void signalMsgFromCu(QByteArray);
 };

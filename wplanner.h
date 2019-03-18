@@ -6,26 +6,17 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonParseError>
-#include <Qset>
-#include <Qmap>
 #include <QPair>
 #include <QString>
 #include <QSharedPointer>
 
-struct Pair{
-    public:
-           Pair(QByteArray name,QByteArray message):Name(name), Message(message) {}
-    private:
-           QByteArray Name, Message;
 
-};
 
-class Wplanner
+class Wplanner: public QTcpServer
 {
     Q_OBJECT
 
 public:
-    Wplanner();
     ~Wplanner();
     Wplanner(QTcpSocket* socket);
     Wplanner(const Wplanner&) = delete;
@@ -35,13 +26,14 @@ public:
     bool changeSocket(QTcpSocket* socketn);
     void shutdown();
 private:
-    QTcpSocket* socketP;                                
+    QTcpSocket* socketP;
+    bool connection;
 public slots:
     void sockReady();
     void sockDisc();
-    Pair msgFromPlanner();
+    void msgFromPlanner();
 signals:
-    void signalMsgFromPl(QByteArray a1, QByteArray a2);
+    void signalMsgFromPl(QByteArray name, QByteArray msg);
 
 };
 
