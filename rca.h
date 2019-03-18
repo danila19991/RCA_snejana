@@ -10,8 +10,11 @@
 #include <QPair>
 #include <QString>
 #include <QSharedPointer>
+#include "wcu.h"
+#include "wplanner.h"
+#include "W3dscene.h"
 
-const int cl = 3;
+
 
 class Rca: public QTcpServer
 {
@@ -20,34 +23,22 @@ class Rca: public QTcpServer
 public:
     Rca();
     ~Rca();
-    void manager(QByteArray, QTcpSocket*);
     Rca(const Rca&) = delete;
     Rca& operator=(const Rca&) = delete;
     Rca(Rca&&)  = delete;
     Rca& operator=(Rca&&) = delete;
-
 private:
-    //QSharedPointer<QTcpSocket> socket(new QTcpSocket);
     QTcpSocket* socket;
-    QTcpSocket* socket1;
-    QTcpSocket* socketP;
     QTcpSocket* newsocket;
+    W3dscene scene;
     QSet<QTcpSocket*> socketNobody;
-    QMap<QByteArray,QTcpSocket*> socketFamiliar;
-    QByteArray Data;
-    QJsonDocument doc;
-    QJsonParseError docerror;
-    int count = 0;
-
+    QMap<QByteArray,Wcu> units;
 public slots:
 
     void incomingConnection(int socketDescriptor); 
     void sockReady();
     void sockDisc();
-    void sockReady1();
-    void sockDisc1();
-    void msgFromPlanner();
-    void msgFromCunit();
+
 };
 
 #endif // RCA_H

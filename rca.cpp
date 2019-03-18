@@ -1,12 +1,14 @@
 #include "rca.h"
-#include "W3dscene.h"
+
 
 
 Rca::Rca(){
-    socket1 = new QTcpSocket(this);
-    W3dscene w3dscene(socket1, 9093);
-    connect(socket1, &QTcpSocket::readyRead, w3dscene, &W3dscene::sockReady1);//?
-    connect(socket1, &QTcpSocket::disconnected, w3dscene, &W3dscene::sockDisc1);//?
+    socket = new QTcpSocket(this);
+    W3dscene w3dscene(socket, 9093);
+    W3dscene * p3ds = &w3dscene;
+
+    connect(socket, &QTcpSocket::readyRead, p3ds, &W3dscene::sockReady1);
+    connect(socket, &QTcpSocket::disconnected, p3ds, &W3dscene::sockDisc1);
 
     if(this->listen( QHostAddress::Any, 5555 ))
     {
@@ -37,35 +39,39 @@ void Rca:: incomingConnection( int socketDescriptor )
     qDebug()<< "The number of client: "<<socketNobody.size();
 
 }
-
-
-
+/*
+ void Rca::FromPlannerToCu(QByteArray name,QByteArray message)
+ {
+     QMap<QByteArray,QTcpSocket*>::const_iterator i = socketFamiliar.find(name);
+     //neeed to send a message to socket  i.value()
+     i.value()->write(message);
+     i.value()->waitForBytesWritten(500);
+ }
+*/
 void Rca::sockReady()
 {
     QObject* object = QObject::sender(); //Returns a pointer to the object that sent the signal
     newsocket = static_cast<QTcpSocket*>(object); //explicit type conversion from the QObject* to the QTcpSocket*
-    Data = socket -> readAll();
+    QByteArray Data = newsocket -> readAll();
 
 
     if(Data=="p"){ //the name of the planner came
-        //Wplanner(newsocket);
-        socketP=newsocket; //удалить
         socketNobody.erase(socketNobody.find(newsocket));//remove the socket from the list of undefined
+        disconnect(newsocket, &QTcpSocket::readyRead, this, &Rca::sockReady);
+        Wplanner wplanner(newsocket);
+        Wplanner * ppl = &wplanner;
+        connect(newsocket, &QTcpSocket::readyRead, ppl, &Wplanner::msgFromPlanner);//?
         qDebug()<< "Find the Planner!";
-        disconnect(newsocket, &QTcpSocket::readyRead, this, &Rca::sockReady);//удалить - ?
-        connect(newsocket, &QTcpSocket::readyRead, this, &Rca::msgFromPlanner);//удалить - ?
-
     }
     else{
-            //if the message passes an unknown socket
-           // if(!socketNobody.contains(newsocket))
-
           //then the name came from an unfamiliar socket
-          socketFamiliar.insert(Data, newsocket); //add it to Familiar
+          Wcu wcu(newsocket,Data);
+          Wcu * pwcu = &wcu;
+          units.insert(Data, wcu); //add it to Familiar
           socketNobody.erase(socketNobody.find(newsocket)); //remove from the list of unknown
           qDebug()<< "Find the CUnit: "<< Data;;
           disconnect(newsocket, &QTcpSocket::readyRead, this, &Rca::sockReady);
-          connect(newsocket, &QTcpSocket::readyRead, this, &Rca::msgFromCunit);
+          connect(newsocket, &QTcpSocket::readyRead, pwcu, &Wcu::msgFromCunit);
 
 
     }

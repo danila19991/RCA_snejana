@@ -12,7 +12,6 @@
 #include <QString>
 #include <QSharedPointer>
 
-const int cl = 3;
 
 class Wcu:  public QTcpServer
 {
@@ -20,7 +19,7 @@ class Wcu:  public QTcpServer
 
 public:
     Wcu();
-    Wcu(QTcpSocket* socketn, QByteArray data);
+    Wcu(QTcpSocket* socketn, QString name);
     ~Wcu();
     Wcu(const Wcu&) = delete;
     Wcu& operator=(const Wcu&) = delete;
@@ -29,16 +28,13 @@ public:
 
 private:
     QTcpSocket* socket;
-    int count = 0;
-    QByteArray Data;
-    //QTcpSocket* newsocket;
-    //QSet<QTcpSocket*> socketNobody;
-    //QMap<QByteArray,QTcpSocket*> socketFamiliar;
+    QString Name;
 
 public slots:
     void sockReady();
     void sockDisc();
-    void msgFromCunit();
+    void msgToCunit(QByteArray msg);
+    QByteArray msgFromCunit();
 signals:
     void signalMsgFromCu(QByteArray);
 };

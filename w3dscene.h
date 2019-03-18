@@ -30,10 +30,9 @@ private:
 
     QTcpSocket* socket;
     int Port;
-    int count;
 
 public slots:
-    void sendto3dscene(QTcpSocket* socket1, QByteArray msg);
+    void sendto3dscene(QByteArray msg);
     void sockReady1();
     void sockDisc1();
 

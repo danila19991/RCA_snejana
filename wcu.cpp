@@ -2,11 +2,10 @@
 
 
 
-Wcu::Wcu(QTcpSocket* socketn, QByteArray data)
+Wcu::Wcu(QTcpSocket* socketn, QString name)
 {
     socket = socketn;
-    Data = data;
-    count = 0;
+    Name = name;
 }
 
 // client is disconnected
@@ -15,18 +14,12 @@ void Wcu::sockDisc()
     qDebug()<<"Disconnect";
     socket ->deleteLater();
 }
-void Wcu::msgFromCunit()
+void Wcu::msgToCunit(QByteArray msg)
 {
-    QObject* object = QObject::sender(); //Returns a pointer to the object that sent the signal
-    socket  = static_cast<QTcpSocket*>(object); //explicit type conversion from the QObject* to the QTcpSocket*
-    QByteArray msg = socket  -> readAll();
-
-    msg.prepend("{");
-    msg.append("}");
-
-    //connect(this,SIGNAL(signalMsgFromCu(int)), this, &W3dscene::sendto3dscene(socket1,msg));
-    // void sendto3dscene(QTcpSocket* socket1, QByteArray msg);
-    //emit signalMsgFromCu(int);
-    socket->write(msg); //sent JSON to 3dscene, soket1 from class w3dscene
-
+    socket->write(msg);
+}
+QByteArray Wcu::msgFromCunit(){
+   QByteArray msg = socket -> readAll();
+   msg.chop(1);
+   return msg;
 }

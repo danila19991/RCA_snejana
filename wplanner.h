@@ -12,7 +12,13 @@
 #include <QString>
 #include <QSharedPointer>
 
-const int cl = 3;
+struct Pair{
+    public:
+           Pair(QByteArray name,QByteArray message):Name(name), Message(message) {}
+    private:
+           QByteArray Name, Message;
+
+};
 
 class Wplanner
 {
@@ -21,34 +27,19 @@ class Wplanner
 public:
     Wplanner();
     ~Wplanner();
-    Wplanner(QTcpSocket* socketn)
-    {
-        socketP = socketn;
-        count = 0;
-        //Data = data;
-        //newsocket = new QTcpSocket;
-        //socketNobody = QSet<QTcpSocket*>();
-        //socketFamiliar = QMap<QByteArray,QTcpSocket*>();
-    }
+    Wplanner(QTcpSocket* socket);
     Wplanner(const Wplanner&) = delete;
     Wplanner& operator=(const Wplanner&) = delete;
     Wplanner(Wplanner&&)  = delete;
     Wplanner& operator=(Wplanner&&) = delete;
     bool changeSocket(QTcpSocket* socketn);
-
+    void shutdown();
 private:
-    QTcpSocket* socketP;
-    int count = 0;
-    //QTcpSocket* newsocket;
-    //QSet<QTcpSocket*> socketNobody;
-    //QMap<QByteArray,QTcpSocket*> socketFamiliar;
-    //QByteArray Data;
-
-
+    QTcpSocket* socketP;                                
 public slots:
     void sockReady();
     void sockDisc();
-    void msgFromplanner();
+    Pair msgFromPlanner();
 signals:
     void signalMsgFromPl(QByteArray a1, QByteArray a2);
 
