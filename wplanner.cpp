@@ -1,12 +1,9 @@
 #include "wplanner.h"
 
 
-Wplanner::Wplanner(QTcpSocket* socket)
+Wplanner::Wplanner()
 {
-    socketP = socket;
-    connect(socketP, &QTcpSocket::readyRead, this, &Wplanner::msgFromPlanner);//?
-    connect(socketP, &QTcpSocket::disconnected, this, &Wplanner::sockDisc);//?
-    connection = true;
+    connection = false;
 }
 
 Wplanner::~Wplanner(){

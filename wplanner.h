@@ -17,8 +17,9 @@ class Wplanner: public QTcpServer
     Q_OBJECT
 
 public:
+    Wplanner();
+    //Wplanner(QTcpSocket* socket);
     ~Wplanner();
-    Wplanner(QTcpSocket* socket);
     Wplanner(const Wplanner&) = delete;
     Wplanner& operator=(const Wplanner&) = delete;
     Wplanner(Wplanner&&)  = delete;

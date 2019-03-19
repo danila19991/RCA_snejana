@@ -1,14 +1,9 @@
 #include "rca.h"
 
 
-
 Rca::Rca(){
-    socket = new QTcpSocket(this);
-    W3dscene w3dscene(socket, 9093);
-    W3dscene * p3ds = &w3dscene;
 
-    connect(socket, &QTcpSocket::readyRead, p3ds, &W3dscene::sockReady1);
-    connect(socket, &QTcpSocket::disconnected, p3ds, &W3dscene::sockDisc1);
+    scene.changeSocket(9093);
 
     if(this->listen( QHostAddress::Any, 5555 ))
     {
@@ -19,6 +14,7 @@ Rca::Rca(){
          qDebug()<<"Error! Unable to start the server:"
                 << this->errorString();
     }
+
 }
 
 Rca::~Rca(){
@@ -56,13 +52,12 @@ void Rca::sockReady()
 
 
     if(Data=="p"){ //the name of the planner came
-        socketNobody.erase(socketNobody.find(newsocket));//remove the socket from the list of undefined
-        disconnect(newsocket, &QTcpSocket::readyRead, this, &Rca::sockReady);
-        Wplanner wplanner(newsocket);
-        Wplanner * ppl = &wplanner;
-        connect(newsocket, &QTcpSocket::readyRead, ppl, &Wplanner::msgFromPlanner);//?
-        qDebug()<< "Find the Planner!";
-    }
+        if(planner.changeSocket(newsocket)){
+            socketNobody.erase(socketNobody.find(newsocket));//remove the socket from the list of undefined
+            disconnect(newsocket, &QTcpSocket::readyRead, this, &Rca::sockReady);
+            qDebug()<< "Find the Planner!";
+        }
+
     else{
           //then the name came from an unfamiliar socket
           Wcu wcu(newsocket,Data);
@@ -72,10 +67,8 @@ void Rca::sockReady()
           qDebug()<< "Find the CUnit: "<< Data;;
           disconnect(newsocket, &QTcpSocket::readyRead, this, &Rca::sockReady);
           connect(newsocket, &QTcpSocket::readyRead, pwcu, &Wcu::msgFromCunit);
-
-
+          }
     }
-
 
 }
 

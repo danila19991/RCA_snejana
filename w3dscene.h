@@ -17,13 +17,12 @@ class W3dscene: public QTcpServer
 public:
 
     W3dscene();
-    W3dscene(int port);
     ~W3dscene();
     W3dscene(const W3dscene&) = delete;
     W3dscene& operator=(const W3dscene&) = delete;
     W3dscene(W3dscene&&)  = delete;
     W3dscene& operator=(W3dscene&&) = delete;
-    bool changeSocket();
+    bool changeSocket(int port);
 
 private:
 
