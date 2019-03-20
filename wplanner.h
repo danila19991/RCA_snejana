@@ -30,7 +30,7 @@ private:
     QTcpSocket* socketP;
     bool connection;
 public slots:
-    void sockReady();
+//    void sockReady();
     void sockDisc();
     void msgFromPlanner();
 signals:

@@ -34,14 +34,14 @@ private:
     W3dscene scene;
     Wplanner planner;
     QSet<QTcpSocket*> socketNobody;
-    QMap<QByteArray,Wcu> units;
+    QMap<QByteArray,Wcu*> units;
 public slots:
 
     void incomingConnection(int socketDescriptor);
-    void disperser(QByteArray n1,QByteArray n2);
+//    void disperser(QByteArray n1,QByteArray n2);
     void sockReady();
-    void sockDisc();
-
+//    void sockDisc();
+    void FromPlannerToCu(QByteArray name, QByteArray msg);
 };
 
 #endif // RCA_H

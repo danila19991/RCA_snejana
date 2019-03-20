@@ -5,6 +5,8 @@ Rca::Rca(){
 
     scene.changeSocket(9093);
 
+    connect(&planner, &Wplanner::signalMsgFromPl, this, &Rca::FromPlannerToCu);
+
     if(this->listen( QHostAddress::Any, 5555 ))
     {
         qDebug()<<"Listening";
@@ -29,21 +31,21 @@ void Rca:: incomingConnection( int socketDescriptor )
     socketNobody.insert(socket); //set of sockets
 
     connect(socket, &QTcpSocket::readyRead, this, &Rca::sockReady);
-    connect(socket, &QTcpSocket::disconnected, this, &Rca::sockDisc);
+//    connect(socket, &QTcpSocket::disconnected, this, &Rca::sockDisc);
 
     qDebug()<< socketDescriptor<<"New client connected\n";
     qDebug()<< "The number of client: "<<socketNobody.size();
 
 }
-/*
+
  void Rca::FromPlannerToCu(QByteArray name,QByteArray message)
  {
-     QMap<QByteArray,QTcpSocket*>::const_iterator i = socketFamiliar.find(name);
+     QMap<QByteArray,Wcu*>::const_iterator i = units.find(name);
      //neeed to send a message to socket  i.value()
-     i.value()->write(message);
-     i.value()->waitForBytesWritten(500);
+     i.value()->msgToCunit(message);
+     //i.value()->waitForBytesWritten(500);
  }
-*/
+//*/
 void Rca::sockReady()
 {
     QObject* object = QObject::sender(); //Returns a pointer to the object that sent the signal
@@ -60,9 +62,9 @@ void Rca::sockReady()
 
     else{
           //then the name came from an unfamiliar socket
-          Wcu wcu(newsocket,Data);
-          Wcu * pwcu = &wcu;
-          units.insert(Data, wcu); //add it to Familiar
+          //Wcu wcu(newsocket,Data);
+          Wcu * pwcu = new Wcu(newsocket, Data);
+          units.insert(Data, pwcu); //add it to Familiar
           socketNobody.erase(socketNobody.find(newsocket)); //remove from the list of unknown
           qDebug()<< "Find the CUnit: "<< Data;;
           disconnect(newsocket, &QTcpSocket::readyRead, this, &Rca::sockReady);
