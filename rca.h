@@ -38,7 +38,6 @@ private:
 public slots:
 
     void incomingConnection(int socketDescriptor);
-//    void disperser(QByteArray n1,QByteArray n2);
     void sockReady();
 //    void sockDisc();
     void FromPlannerToCu(QByteArray name, QByteArray msg);

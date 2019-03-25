@@ -5,9 +5,10 @@
 Wcu::Wcu(QTcpSocket* socketn, QString name){
     socket = socketn;
     Name = name;
-    connect(socket, &QTcpSocket::readyRead, this, &Wcu::msgFromCunit);//?
-    connect(socket, &QTcpSocket::disconnected, this, &Wcu::sockDisc);//?
+    connect(socket, &QTcpSocket::readyRead, this, &Wcu::msgFromCunit);
+    connect(socket, &QTcpSocket::disconnected, this, &Wcu::sockDisc);
     connection = true;
+
 }
 
 Wcu::~Wcu(){
