@@ -31,7 +31,6 @@ private:
     bool connection;
 
 public slots:
-    void sockReady();
     void sockDisc();
     void msgToCunit(QByteArray msg);
     void msgFromCunit();
