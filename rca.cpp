@@ -57,6 +57,7 @@ void Rca::sockReady()
             disconnect(newsocket, &QTcpSocket::readyRead, this, &Rca::sockReady);
             qDebug()<< "Find the Planner!";
         }
+    }
 
     else{
           //then the name came from an unfamiliar socket
