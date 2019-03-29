@@ -26,17 +26,17 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
-        main.cpp \
-    rca.cpp \
-    w3dscene.cpp \
-    wplanner.cpp \
-    wcu.cpp
+main.cpp \
+manager/rca.cpp \
+connectors/w3dscene.cpp \
+connectors/wplanner.cpp \
+connectors/wcu.cpp
 
 HEADERS += \
-    rca.h \
-    w3dscene.h \
-    wplanner.h \
-    wcu.h
+manager/rca.h \
+connectors/w3dscene.h \
+connectors/wplanner.h \
+connectors/wcu.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
