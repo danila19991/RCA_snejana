@@ -1,5 +1,7 @@
 #include "manager/rca.h"
-
+#include "connectors/wplanner.h"
+#include "connectors/wcu.h"
+#include "connectors/w3dscene.h"
 
 Rca::Rca(){
 

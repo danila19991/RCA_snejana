@@ -27,16 +27,16 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-    rca.cpp \
-    w3dscene.cpp \
-    wplanner.cpp \
-    wcu.cpp
+    manager/rca.cpp \
+    connectors/w3dscene.cpp \
+    connectors/wcu.cpp \
+    connectors/wplanner.cpp
 
 HEADERS += \
-    rca.h \
-    w3dscene.h \
-    wplanner.h \
-    wcu.h
+    manager/rca.h \
+    connectors/w3dscene.h \
+    connectors/wcu.h \
+    connectors/wplanner.h
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin

@@ -10,9 +10,9 @@
 #include <QPair>
 #include <QString>
 #include <QSharedPointer>
-#include "wcu.h"
-#include "wplanner.h"
-#include "w3dscene.h"
+#include "connectors/wplanner.h"
+#include "connectors/wcu.h"
+#include "connectors/w3dscene.h"
 
 
 
