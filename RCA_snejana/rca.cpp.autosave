@@ -3,7 +3,7 @@
 
 Rca::Rca(){
 
-    scene = (9093);
+    scene = new W3dscene(9093);
 
     connect(&planner, &Wplanner::signalMsgFromPl, this, &Rca::FromPlannerToCu);
 
@@ -67,7 +67,7 @@ void Rca::sockReady()
           qDebug()<< "Find the CUnit: "<< Data;;
           disconnect(newsocket, &QTcpSocket::readyRead, this, &Rca::sockReady);
           connect(newsocket, &QTcpSocket::readyRead, pwcu, &Wcu::msgFromCunit);
-          connect(pwcu, &Wcu::signalMsgFromCu, &scene, &W3dscene::sendto3dscene);
+          connect(pwcu, &Wcu::signalMsgFromCu, scene, &W3dscene::sendto3dscene);
           }
     }
 

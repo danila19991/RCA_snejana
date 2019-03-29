@@ -31,8 +31,8 @@ public:
 private:
     QTcpSocket* socket;
     QTcpSocket* newsocket;
-    W3dscene scene;
-    Wplanner *planner;
+    W3dscene *scene;
+    Wplanner planner;
     QSet<QTcpSocket*> socketNobody;
     QMap<QByteArray,Wcu*> units;
 public slots:
