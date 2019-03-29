@@ -1,4 +1,4 @@
-#include "connectors\wplanner.h"
+#include "connectors/wplanner.h"
 
 
 Wplanner::Wplanner()
