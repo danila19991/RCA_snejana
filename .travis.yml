@@ -12,6 +12,7 @@ install:
 script:
  - qmake -v
  - qmake -r
+ - cd RCA_snejana
  - qmake -project
  - qmake RCA1_0.pro
  - make
