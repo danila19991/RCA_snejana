@@ -1,5 +1,5 @@
 #include <QCoreApplication>
-#include "rca.h"
+#include "manager\rca.h"
 
 int main(int argc, char *argv[])
 {

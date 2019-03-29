@@ -1,4 +1,4 @@
-#include "w3dscene.h"
+#include "connectors\w3dscene.h"
 
 //при инициализации подключается к 3d scene
 W3dscene::W3dscene(){
