@@ -21,16 +21,10 @@ void W3dscene::sendto3dscene(QByteArray msg){
     msg.append("}");
     socket->write(msg); //sent JSON to 3dscene, soket1 from class w3dscene
 }
-bool W3dscene::changeSocket(int port){
-    if(connection){
-        return false;
-    }
-    else{
+W3dscene::W3dscene(int port){
         socket = new QTcpSocket(this);
         Port = port;
         connect(socket, &QTcpSocket::disconnected, this, &W3dscene::sockDisc);
         socket->connectToHost("127.0.0.1", 9093); //connect to 3Dscene
         connection = true;
-        return true;
-    }
 }
