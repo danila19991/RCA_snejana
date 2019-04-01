@@ -17,7 +17,7 @@ Wcu::~Wcu(){
 
 // client is disconnected
 void Wcu::sockDisc(){
-    qDebug()<<"Disconnect";
+    qDebug()<<"CUnit Disconnect";
     socket ->deleteLater();
 }
 
@@ -34,10 +34,19 @@ bool Wcu::changeSocket(QTcpSocket* newsocket){
 
 void Wcu::msgToCunit(QByteArray msg){
     socket->write(msg);
+    qDebug()<<"Recive msg to Cunit: "<<msg;
+
 }
 
 void Wcu::msgFromCunit(){
    QByteArray msg = socket -> readAll();
-   msg.chop(1);
-   emit signalMsgFromCu(msg);
+   if (msg =="") {
+       qDebug()<<"Recive empty msg from Cunit";
+   }
+   else{
+       qDebug()<<"Recive msg from Cunit: "<<msg;
+       msg.chop(1);
+       //qDebug()<<"Msg from Cunit after chop: "<<msg;
+       emit signalMsgFromCu(msg);
+   }
 }

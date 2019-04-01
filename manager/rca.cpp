@@ -5,7 +5,7 @@
 
 Rca::Rca(){
 
-    scene = new W3dscene(9093);
+    scene = new W3dscene(6666); //9093
 
     connect(&planner, &Wplanner::signalMsgFromPl, this, &Rca::FromPlannerToCu);
 
@@ -35,15 +35,16 @@ void Rca:: incomingConnection( int socketDescriptor )
     connect(socket, &QTcpSocket::readyRead, this, &Rca::sockReady);
 
     qDebug()<< socketDescriptor<<"New client connected\n";
-    qDebug()<< "The number of client: "<<socketNobody.size();
 
 }
 
  void Rca::FromPlannerToCu(QByteArray name,QByteArray message)
  {
      QMap<QByteArray,Wcu*>::const_iterator i = units.find(name);
+     qDebug()<<"find CUnit with name: "<< name;
      //neeed to send a message to socket  i.value()
      i.value()->msgToCunit(message);
+     qDebug()<<"Send msg to Cunit from PL: "<< message;
  }
 
 void Rca::sockReady()
